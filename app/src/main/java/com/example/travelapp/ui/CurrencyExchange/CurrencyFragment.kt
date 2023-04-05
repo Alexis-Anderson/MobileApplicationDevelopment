@@ -1,10 +1,14 @@
 package com.example.travelapp.ui.CurrencyExchange
 
+import android.app.Activity
+import android.content.Context
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -17,7 +21,9 @@ import okhttp3.Response
 import org.json.JSONObject
 import org.json.JSONTokener
 import java.io.IOException
+import java.math.RoundingMode
 import java.net.URL
+import java.text.DecimalFormat
 
 class CurrencyFragment : Fragment(R.layout.fragment_currency) {
 
@@ -31,28 +37,55 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency) {
         binding = FragmentCurrencyBinding.inflate(layoutInflater)
     }
 
+    override fun onResume() {
+        super.onResume()
+        val currencyArray = resources.getStringArray(R.array.currency)
+        val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, currencyArray)
+        binding.convertFromEditTxt.setAdapter(arrayAdapter)
+        binding.convertToEditTxt.setAdapter(arrayAdapter)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-
-//        binding.convertToEditTxt.setAdapter(arrayAdapter)
-
         binding = FragmentCurrencyBinding.inflate(layoutInflater)
         val root: View = binding.root
+
+        binding.convertToValue.visibility = View.GONE
+        binding.convertToText.visibility = View.GONE
 
         val currencyArray = resources.getStringArray(R.array.currency)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item, currencyArray)
         binding.convertFromEditTxt.setAdapter(arrayAdapter)
         binding.convertToEditTxt.setAdapter(arrayAdapter)
 
+        binding.convertFromEditTxt.setOnClickListener {
+            view?.let { activity?.hideKeyboard(it)}
+        }
+
+        binding.convertToEditTxt.setOnClickListener{
+            view?.let { activity?.hideKeyboard(it)}
+        }
+
+        binding.progressBar.visibility = View.GONE
+
         binding.convertBtn.setOnClickListener {
+
+            binding.progressBar.visibility = View.VISIBLE
+            view?.let { activity?.hideKeyboard(it)}
             fetchUrl()
+//            binding.progressBar.visibility = View.GONE
         }
 
         return root
+    }
+
+    fun Context.hideKeyboard(view: View){
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun fetchUrl() {
@@ -62,7 +95,7 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency) {
 
 
 
-        if (to.isNotEmpty() && from.isNotEmpty()) {
+        if (to.isNotEmpty() && from.isNotEmpty() && value.isNotEmpty()) {
             val url = URL("https://open.er-api.com/v6/latest/$from")
 
             val request = okhttp3.Request.Builder().url(url).build()
@@ -93,6 +126,8 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency) {
 
 
                             binding.convertToValue.text = getString(R.string.currency, currencyRate.toString())
+
+                            binding.progressBar.visibility = View.GONE
                         }
 
                     })
@@ -101,20 +136,29 @@ class CurrencyFragment : Fragment(R.layout.fragment_currency) {
 
             })
         } else {
-            if (to.isNullOrEmpty()) {
+            if(value.isNullOrEmpty()){
+                Toast.makeText(context, "Nothing was entered for the amount", Toast.LENGTH_SHORT).show()
+            }else if (to.isNullOrEmpty()) {
                 Toast.makeText(context, "Right dropdown can not be empty", Toast.LENGTH_SHORT)
                     .show()
             } else if (from.isNullOrEmpty()) {
                 Toast.makeText(context, "Left dropdown can not be empty", Toast.LENGTH_SHORT).show()
             }
-            Toast.makeText(context, "Nothing was entered", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "Nothing was entered", Toast.LENGTH_SHORT).show()
         }
 
 
     }
 
     private fun convert(to: Double, value: Double): Double {
-        return value * to
+        binding.convertToText.visibility = View.VISIBLE
+        binding.convertToValue.visibility = View.VISIBLE
+
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.DOWN
+
+        val result = if(value == null) df.format(1*to).toDouble() else df.format(value*to).toDouble()
+        return result
     }
 
     override fun onDestroyView() {
