@@ -7,6 +7,7 @@ plugins {
 android {
     namespace 'com.example.travelapp'
     compileSdk 33
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.example.travelapp"
@@ -58,4 +59,12 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
     implementation "com.google.android.material:material:$version"
+
+    //location
+    implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.1.0'
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+
 }
