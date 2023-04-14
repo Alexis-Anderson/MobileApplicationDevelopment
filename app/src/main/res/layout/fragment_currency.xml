@@ -9,7 +9,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/amt"
-        android:layout_width="225dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
         app:layout_constraintBottom_toTopOf="@id/convert_from"
@@ -29,7 +29,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/convert_from"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="150dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="25dp"
@@ -45,6 +45,7 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="1"
             android:background="#00FFFFFF"
+            android:hint="@string/convert_from"
             android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -52,7 +53,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/convert_to"
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="150dp"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -67,6 +68,7 @@
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_weight="1"
             android:background="#00FFFFFF"
+            android:hint="@string/convert_to"
             android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 

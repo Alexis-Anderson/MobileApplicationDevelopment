@@ -118,9 +118,9 @@ class GPSFragment : Fragment(R.layout.fragment_gps), SharedPreferences.OnSharedP
     override fun onStart() {
         super.onStart()
 
-        updateButtonState(
-            sharedPreferences.getBoolean(SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
-        )
+        //updateButtonState(
+        //    sharedPreferences.getBoolean(SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
+        //)
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
 
         val serviceIntent = Intent(this.requireContext().applicationContext, ForegroundOnlyLocationService::class.java)
@@ -156,9 +156,9 @@ class GPSFragment : Fragment(R.layout.fragment_gps), SharedPreferences.OnSharedP
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
         // Updates button states if new while in use location is added to SharedPreferences.
         if (key == SharedPreferenceUtil.KEY_FOREGROUND_ENABLED) {
-            updateButtonState(sharedPreferences.getBoolean(
-                SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
-            )
+            //updateButtonState(sharedPreferences.getBoolean(
+            //    SharedPreferenceUtil.KEY_FOREGROUND_ENABLED, false)
+            //)
         }
     }
 
@@ -221,7 +221,7 @@ class GPSFragment : Fragment(R.layout.fragment_gps), SharedPreferences.OnSharedP
 
                 else -> {
                     // Permission denied.
-                    updateButtonState(false)
+                    //updateButtonState(false)
 
                     Snackbar.make(
                         binding.gpsConstraint,
@@ -247,14 +247,14 @@ class GPSFragment : Fragment(R.layout.fragment_gps), SharedPreferences.OnSharedP
         }
     }
 
-    private fun updateButtonState(trackingLocation: Boolean) {
+    /*private fun updateButtonState(trackingLocation: Boolean) {
         if (trackingLocation) {
             foregroundOnlyLocationButton.text = getString(R.string.stop_location_updates_button_text)
         } else {
             foregroundOnlyLocationButton.text = getString(R.string.start_location_updates_button_text)
         }
     }
-
+*/
     private fun logResultsToScreen(output: String) {
         //val outputWithPreviousLogs = "$output\n${outputTextView.text}"
         //outputTextView.text = outputWithPreviousLogs
